@@ -8,6 +8,6 @@ resource "aws_instance" "tf_instance" {
     instance_type = "t2.micro"
     key_name = var.instance_key_name
     tags = {
-        name = var.instance_name
+        Name = var.instance_name
     }
 }
