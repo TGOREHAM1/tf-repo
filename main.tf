@@ -10,4 +10,7 @@ resource "aws_instance" "tf_instance" {
     tags = {
         Name = var.instance_name
     }
+    vpc_security_group_ids = [
+        aws_security_group.tf-security-group.id
+    ]
 }

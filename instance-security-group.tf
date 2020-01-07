@@ -13,6 +13,7 @@ resource "aws_security_group_rule" "allow_http" {
 }
 
 resource "aws_security_group_rule" "allow_ssh" {
+  count = var.instance_allow_ssh == true ? 1 : 0
   type = "ingress"
   from_port = 22
   to_port = 22
