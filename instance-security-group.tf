@@ -1,4 +1,4 @@
-resource "aws_security_group" "tf-security-group" {
+resource "aws_security_group" "tf_security_group" {
   description = "Allows HTTP & conditional SSH access"
   name_prefix = "${var.instance_name}-"
 }
@@ -9,7 +9,7 @@ resource "aws_security_group_rule" "allow_http" {
   to_port = 80
   protocol = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.tf-security-group.id
+  security_group_id = aws_security_group.tf_security_group.id
 }
 
 resource "aws_security_group_rule" "allow_ssh" {
@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "allow_ssh" {
   to_port = 22
   protocol = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.tf-security-group.id
+  security_group_id = aws_security_group.tf_security_group.id
 }
 
 resource "aws_security_group_rule" "allow_egress_all" {
@@ -28,5 +28,5 @@ resource "aws_security_group_rule" "allow_egress_all" {
   to_port     = 0
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.tf-security-group.id 
+  security_group_id = aws_security_group.tf_security_group.id 
 }
