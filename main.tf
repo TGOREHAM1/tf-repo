@@ -3,20 +3,49 @@ provider "aws" {
     profile = "default"
 }
 
-data "aws_ssm_parameter" "latest_ami" {
-    name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+provider "aws" {
+    region = "eu-west-1"
+    alias = "euwest1"
+    profile = "default"
 }
 
+resource "random_string" "instance_name" {
+    length = 8
+    special = false
+}
 
-resource "aws_instance" "tf_instance" {
-    ami = data.aws_ssm_parameter.latest_ami.value
-    instance_type = "t2.micro"
-    key_name = var.instance_key_name
-    tags = {
-        Name = var.instance_name
-    }
-    vpc_security_group_ids = [
-        aws_security_group.tf_security_group.id
-    ]
-    iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+module "instance" {
+  source = "./modules/instance"
+  instance_key_name = "cfn-kp"
+  instance_name = "tf_instance"
+  instance_allow_ssh = true
+}
+
+module "another_instance" {
+  source = "./modules/instance"
+  instance_key_name = "cfn-kp"
+  instance_name = "tf_instance_${random_string.instance_name.result}"
+  instance_allow_ssh = true
+}
+
+module "west1_instance" {
+  source = "./modules/instance"
+  instance_key_name = null
+  instance_name = "tf_instance_${random_string.instance_name.result}"
+  instance_allow_ssh = false
+  providers = {
+      aws = aws.euwest1
+  }
+}
+
+output "instance_ip" {
+    value = module.instance.instance_public_ip
+}
+
+output "another_instance_ip" {
+  value = module.another_instance.instance_public_ip
+}
+
+output "west1_instance_ip" {
+  value = module.west1_instance.instance_public_ip
 }

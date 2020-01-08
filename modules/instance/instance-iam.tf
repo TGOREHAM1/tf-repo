@@ -1,10 +1,9 @@
 resource "aws_iam_instance_profile" "instance_profile" {
-  role = aws_iam_role.instance_logs_role.name
-  
+  role = aws_iam_role.instance_logs_role.name 
 }
 
 resource "aws_iam_role" "instance_logs_role" {
-  name_prefix = "${var.instance_name}-role"
+  name_prefix = "${var.instance_name}-role-"
   assume_role_policy = data.aws_iam_policy_document.instance_trust_policy.json
 }
 
